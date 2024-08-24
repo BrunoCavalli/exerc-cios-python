@@ -1,14 +1,13 @@
-"""resolução exercício 3 da lista de Linguagens de programação"""
-
 def verifica_se_é_retangulo(valor):
-    # função que testa se o objeto é um retangulo
+    # função que testa se o objeto é um retângulo ou não
     if len(valor) != 4:
-        print("não é um triangulo")
+        print("não é um retângulo")
         return False
     
     for vertice in valor:
-        if not isinstance(vertice, (int, float)):
-            print("os vertices (x,y) tem que ser inteiros")
+        if not (isinstance(vertice, tuple) and len(vertice) == 2 and
+                isinstance(vertice[0], (int, float)) and isinstance(vertice[1], (int, float))):
+            print("Os vértices (x, y) devem ser tuplas de dois números.")
             return False
         
     return True
@@ -18,21 +17,21 @@ def retangulos_colidem(retan_1, retan_2):
     if not verifica_se_é_retangulo(retan_1) or not verifica_se_é_retangulo(retan_2):
         return None
     
-    x1, y1, largura1, altura1 = retan_1 
-    x2, y2, largura2, altura2 = retan_2
-
+    # calcula os limites dos triangulos
+    x1_min, y1_min = min(p[0] for p in retan_1), min(p[1] for p in retan_1)
+    x1_max, y1_max = max(p[0] for p in retan_1), max(p[1] for p in retan_1)
+    
+    x2_min, y2_min = min(p[0] for p in retan_2), min(p[1] for p in retan_2)
+    x2_max, y2_max = max(p[0] for p in retan_2), max(p[1] for p in retan_2)
+    
     # Verifica se os retângulos colidem
-    colisao_x = not (x1 + largura1 < x2 or x2 + largura2 < x1)
-    colisao_y = not (y1 + altura1 < y2 or y2 + altura2 < y1)
+    colisao_x = not (x1_max < x2_min or x2_max < x1_min)
+    colisao_y = not (y1_max < y2_min or y2_max < y1_min)
 
     return colisao_x and colisao_y
 
-retan_1 = (0, 0, 40, 50)
-retan_2 = (50, 50, 100, 100)
 
+retangulo_1 = ((1, 1), (4, 1), (4, 3), (1, 3))
+retangulo_2 = ((3, 2), (6, 2), (6, 5), (3, 5))
 
-if retangulos_colidem(retan_1, retan_2):
-    print("colide")
-else:
-    print("não colide")
-
+print(retangulos_colidem(retangulo_1, retangulo_2)) 
